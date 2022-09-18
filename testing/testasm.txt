@@ -1,0 +1,37 @@
+# UNRUNABLE, Lists all 6502 asm instructions translated from test.txt's code
+# All Values on right side show expected outputs after execution of each instruction
+# Test doesn't use proper Rom mapping for NES, assumes all spaces are blank
+
+NOP impl ;Skip to next instruction 	    pc=0x602, sp=0xff, A=0, X=0, Y=0, S=00100000, cycles = 2
+CLC impl ;set clear flag to 0	   	      pc=0x603, sp=0xff, A=0, X=0, Y=0, S=00100000, cycles = 4
+ADC #$10 ;ADC IMM by some value	   	    pc=0x605, sp=0xff, A=10, X=0, Y=0, S=00100000, cycles = 6
+SEC impl ;set clear flag to 1      	    pc=0x606, sp=0xff, A=10, X=0, Y=0, S=00100001, cycles = 8
+SBC $00  ;SBC ZP0 sub by val in $0=10	  pc=0x608, sp=0xff, A=0, X=0, Y=0, S=00100010, cycles = 11
+CLC impl ; set clear to 0		            pc=0x609, sp=0xff, A=0, X=0, Y=0, S=00100010, cycles = 13
+ADC #$13 ;ADC by 13			                pc=0x60b, sp=0xff, A=13, X=0, Y=0, S=00100000, cycles = 15
+SEC impl ;set clear to 1		            pc=0x60c, sp=0xff, A=13, X=0, Y=0, S=00100001, cycles = 17
+SBC #$85 ;subtract			                pc=0x60e, sp=0xff, A=8e, X=0, Y=0, S=11100000, cycles = 19
+LDX #$f1 ;load val into X		            pc=0x610, sp=0xff, A=8e, X=f1, Y=0, S=11100000, cycles = 21
+EOR $11,X ;EOR by val+X: $11+$f1=$2=30  pc=0x612, sp=0xff, A=be, X=f1, Y=0, S=11100000, cycles = 25
+JMP ($7000) ;IND: valAt $07=$9080   	  pc=0x9080, sp=0xff, A=be, X=f1, Y=0, S=11100000, cycles = 30
+LDY #$0b; Load 0b into Y		            pc=0x9082, sp=0xff, A=be, X=f1, Y=0b, S=01100000, cycles = 32
+ADC $0600,Y; ADC with val at $0600+Y	  pc=0x9085, sp=0xff, A=f6, X=f1, Y=0b, S=10100000, cycles = 36
+JMP $0615; JMP to address		            pc=0x615, sp=0xff, A=f6, X=f1, Y=0b, S=10100000, cycles = 39
+BMI $10; Adds to curr pc if N=1		      pc=0x626, sp=0xff, A=f6, X=f1, Y=0b, S=10100000, cycles = 42
+BNE $d4; Adds to curr pc if Z=0		      pc=0x5fb, sp=0xff, A=f6, X=f1, Y=0b, S=10100000, cycles = 46
+BEQ $19; Adds to curr pc if Z=1		      pc=0x5fd, sp=0xff, A=f6, X=f1, Y=0b, S=10100000, cycles = 48
+BVC $80; Adds to curr pc if V=0		      pc=0x57e, sp=0xff, A=f6, X=f1, Y=0b, S=10100000, cycles = 51
+CMP ($61,X); CMP val to mem[($61+X)]&ff	pc=0x580, sp=0xff, A=f6, X=f1, Y=0b, S=00100011, cycles = 57
+STA ($c4),Y: Store A into mem[$c4] + Y  pc=0x582, sp=0xff, A=f6, X=f1, Y=0b, S=00100011, cycles = 63
+CMP $123f: CMP val to mem[$123f] for A  pc=0x585, sp=0xff, A=f6, X=f1, Y=0b, S=00100011, cycles = 67
+PHA: Push A to stack                    pc=0x586, sp=0xfe, A=f6, X=f1, Y=0b, S=00100011, cycles = 70
+LDA $10: Set A to val in $10		        pc=0x588, sp=0xfe, A=0, X=f1, Y=0b, S=00100011, cycles = 73
+PLA: Pull A from stack                  pc=0x589, sp=0xff, A=f6, X=f1, Y=0b, S=10100001, cycles = 77
+PLA: Pull A from stack                  pc=0x58a, sp=0x0, A=0, X=f1, Y=0b, S=00100011, cycles = 81
+PHA: Push A to stack                    pc=0x58b, sp=0xff, A=0, X=f1, Y=0b, S=00100011, cycles = 84
+BIT $c0: Bit test on val at $c0         pc=0x58d, sp=0xff, A=0, X=f1, Y=0b, S=11100011, cycles = 87
+CLC: Clear carry flag before ADC        pc=0x58e, sp=0xff, A=0, X=f1, Y=0b, S=11100010, cycles = 89
+ADC $1000, X: ADC w/ val at $1000+X     pc=0x591, sp=0xff, A=33, X=f1, Y=0b, S=00100000, cycles = 93
+JSR $0540:Push pc to stack, JMP to $540 pc=0x540, sp=0xfd, A=33, X=f1, Y=0b, S=00100000, cycles = 99
+RTS: Pull pc from stack, JMP to pulled  pc=0x594, sp=0xff, A=33, X=f1, Y=0b, S=00100000, cycles = 105
+BRK: Force break inturrupt, pc&S pushed pc=0, sp=0xfc, A=33, X=f1, Y=0b, S=00110100, cycles = 112

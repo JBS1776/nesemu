@@ -1,0 +1,7 @@
+﻿  bus.cpp
+  cpu.cpp
+E:\nesemu\cpu.h(44): warning C4091: 'typedef ': ignored on left of 'Cpu::instruction' when no variable is declared
+  main.cpp
+E:\nesemu\cpu.h(44): warning C4091: 'typedef ': ignored on left of 'Cpu::instruction' when no variable is declared
+  Generating Code...
+  nesemu.vcxproj -> E:\nesemu\x64\Debug\nesemu.exe
